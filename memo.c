@@ -16,7 +16,7 @@ static struct option longopts[] = {
 
 int main(int argc, char *argv[]){
 	int opt;
-	char name_channel[50] = DEFAULT_CHANNEL;
+	char name_channel[64] = DEFAULT_CHANNEL;
 
 	while ((opt = getopt_long(argc, argv, "c:", longopts, NULL)) != -1) {
 		switch (opt) {
@@ -48,14 +48,14 @@ static void do_memo(char* channel, char *message) {
 		perror(".accesstoken");
 		exit(1);
 	}
-	if(fgets(token, 80, ftoken)) {
+	if (fgets(token, 80, ftoken)) {
 		p = strchr(token, '\n');
 		if (p) {
 			*p = '\0';
 		}
 	}
 	fclose(ftoken);
-	char send_message[200];
+	char send_message[256];
 	sprintf(send_message, "curl -XPOST -d 'token=%s&channel=%s&text=%s' https://slack.com/api/chat.postMessage 1>/dev/null 2>&1", token, channel, message);
 	system(send_message);
 	fprintf(stdout, "channel:%s, message:%s\n", channel, message);
